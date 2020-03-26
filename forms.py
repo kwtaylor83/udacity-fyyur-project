@@ -10,17 +10,18 @@ class ShowForm(FlaskForm):
     artist_id = IntegerField(
         'artist_id',
         validators=[DataRequired(), NumberRange(min=1, message="Please enter a numeric ID")]
-    )   # NumberRange does not work
+    )   
     venue_id = IntegerField(
         'venue_id',
         validators=[DataRequired(), NumberRange(min=1, message="Please enter a numeric ID")]       
-    )   # NumberRange does not work
+    )   
     start_time = DateTimeField(
         'start_time',
         validators=[DataRequired()],
         default=datetime.today()
     )
 
+    # Could not get this to work. Cannot import db and the models
     # def validate_artist_id(self, artist_id):
     #     artist = Artist.query.filter_by(artist_id=artist_id).first()
     #     if artist is None:
