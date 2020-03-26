@@ -3,6 +3,7 @@ from flask_wtf import FlaskForm
 from wtforms import StringField, SelectField, SelectMultipleField, DateTimeField, SubmitField, IntegerField
 from wtforms.validators import ValidationError, DataRequired, AnyOf, URL, Length, NumberRange, Optional
 from enum import Enum
+# from models import Artist, Venue, Show
 
 
 class ShowForm(FlaskForm):
@@ -17,7 +18,7 @@ class ShowForm(FlaskForm):
     start_time = DateTimeField(
         'start_time',
         validators=[DataRequired()],
-        default= datetime.today()
+        default=datetime.today()
     )
 
     # def validate_artist_id(self, artist_id):
@@ -35,42 +36,16 @@ class ShowForm(FlaskForm):
     #     if show is not None:
     #         raise ValidationError('This artist is already booked at the venue for that time.')
     
-
     # def validate_time_clash(self, venue_id, start_time): 
     #     show = Show.query.filter_by(venue_id=venue_id, start_time=start_time)
     #     if show is not None:
     #         raise ValidationError('There is already a show at that venue at the specified time.')
     
-
     # def validate_double_booked(self, artist_id, venue_id, start_time): 
     #     show = Show.query.filter_by(artist_id=artist_id, start_time=start_time)
     #     if show is not None:
     #         raise ValidationError('This artist is already booked elsewhere at the specified time.')
 
-class Genre(Enum):
-    Alternative = 'Alternative'
-    Blues = 'Blues'
-    Classical = 'Classical'
-    Country = 'Country'
-    Electronic = 'Electronic'
-    Folk = 'Folk'
-    Funk = 'Funk'
-    Hip_Hop = 'Hip-Hop'
-    Heavy_Metal = 'Heavy Metal'
-    Instrumental = 'Instrumental'
-    Jazz = 'Jazz'
-    Musical_Theatre = 'Musical Theatre'
-    Pop = 'Pop'
-    Punk = 'Punk'
-    R_and_B = 'R&B'
-    Reggae = 'Reggae'
-    Rock_n_Roll = 'Rock n Roll'
-    Soul = 'Soul'
-    Other = 'Other'    
-
-    @classmethod
-    def choices(cls):
-        return [ (choice.value, choice.value) for choice in cls ]
 
 class USState(Enum):
     AL = 'Alabama'
@@ -139,7 +114,7 @@ class VenueForm(FlaskForm):
         'city', validators=[DataRequired(), Length(min=2, max=120)]
     )
     state = SelectField(
-        'state', validators=[DataRequired(), AnyOf( [ (choice.name) for choice in USState ] )],
+        'state', validators=[DataRequired(), AnyOf([choice.name for choice in USState])],
         choices=USState.choices()
     )
     address = StringField(
@@ -151,10 +126,30 @@ class VenueForm(FlaskForm):
     image_link = StringField(
         'image_link', validators=[Optional(), URL()]
     )
+   
     genres = SelectMultipleField(
-        # TODO implement enum restriction
-        'genres', validators=[Optional(), AnyOf( [ (choice.value) for choice in Genre ] )],
-        choices=Genre.choices()
+        'genres', validators=[Optional()],
+        choices=[
+            ('Alternative', 'Alternative'),
+            ('Blues', 'Blues'),
+            ('Classical', 'Classical'),
+            ('Country', 'Country'),
+            ('Electronic', 'Electronic'),
+            ('Folk', 'Folk'),
+            ('Funk', 'Funk'),
+            ('Hip-Hop', 'Hip-Hop'),
+            ('Heavy Metal', 'Heavy Metal'),
+            ('Instrumental', 'Instrumental'),
+            ('Jazz', 'Jazz'),
+            ('Musical Theatre', 'Musical Theatre'),
+            ('Pop', 'Pop'),
+            ('Punk', 'Punk'),
+            ('R&B', 'R&B'),
+            ('Reggae', 'Reggae'),
+            ('Rock n Roll', 'Rock n Roll'),
+            ('Soul', 'Soul'),
+            ('Other', 'Other'),
+        ]
     )    
     website_link = StringField(
         'website_link', validators=[Optional(), URL()]
@@ -172,8 +167,8 @@ class ArtistForm(FlaskForm):
         'city',
     )
     state = SelectField(
-        'state', validators=[Optional(), AnyOf( [ (choice.name) for choice in USState ] )],
-        choices=USState.choices()
+        'state', validators=[Optional(), AnyOf([(choice.name) for choice in USState])],
+        choices = USState.choices()
     )
     phone = StringField(
         # TODO implement validation logic for state
@@ -182,13 +177,33 @@ class ArtistForm(FlaskForm):
     image_link = StringField(
         'image_link', validators=[Optional(), URL()]
     )
+
     genres = SelectMultipleField(
-        # TODO implement enum restriction
-        'genres', validators=[Optional(), AnyOf( [ (choice.value) for choice in Genre ] )],
-        choices=Genre.choices()
-    )
+        'genres', validators=[Optional()],
+        choices=[
+            ('Alternative', 'Alternative'),
+            ('Blues', 'Blues'),
+            ('Classical', 'Classical'),
+            ('Country', 'Country'),
+            ('Electronic', 'Electronic'),
+            ('Folk', 'Folk'),
+            ('Funk', 'Funk'),
+            ('Hip-Hop', 'Hip-Hop'),
+            ('Heavy Metal', 'Heavy Metal'),
+            ('Instrumental', 'Instrumental'),
+            ('Jazz', 'Jazz'),
+            ('Musical Theatre', 'Musical Theatre'),
+            ('Pop', 'Pop'),
+            ('Punk', 'Punk'),
+            ('R&B', 'R&B'),
+            ('Reggae', 'Reggae'),
+            ('Rock n Roll', 'Rock n Roll'),
+            ('Soul', 'Soul'),
+            ('Other', 'Other'),
+        ]
+    )       
     website_link = StringField(
-        'website_link', validators=[Optional(), URL()]
+        'website_link', validators = [Optional(), URL()]
     )    
     facebook_link = StringField(
         'facebook_link', validators=[Optional(), URL()]
@@ -201,12 +216,12 @@ class ArtistForm(FlaskForm):
         available_hours_parts = available_hours.data.split('-')
         try:
             from_hour = int(available_hours_parts[0])
-        except:
+        except Exception:
             raise ValidationError("Invalid format for available hours.")
 
         try:
             to_hour = int(available_hours_parts[1])
-        except:
+        except Exception:
             raise ValidationError("Invalid format for available hours.")        
 
         try:
@@ -215,7 +230,7 @@ class ArtistForm(FlaskForm):
 
             if to_hour <= from_hour:
                 raise ValidationError("Invalid format for available hours.")           
-        except:
+        except Exception:
             raise ValidationError("Invalid format for available hours.")   
 
 # TODO IMPLEMENT NEW ARTIST FORM AND NEW SHOW FORM
