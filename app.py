@@ -23,6 +23,7 @@ from flask_wtf import FlaskForm
 from forms import ShowForm, VenueForm, ArtistForm
 from flask_migrate import Migrate
 import copy
+from models import setup_db, Venue, Artist, Show
 
 #----------------------------------------------------------------------------#
 # App Config.
@@ -31,11 +32,7 @@ import copy
 app = Flask(__name__)
 moment = Moment(app)
 app.config.from_object('config')
-db = SQLAlchemy(app)
-migrate = Migrate(app, db)
-
-from models import Venue, Artist, Show
-
+db = setup_db(app)
 
 #----------------------------------------------------------------------------#
 # Filters.
